@@ -1,0 +1,122 @@
+/**************************************************************************/
+/* [Title] Fraig Grading Help (for students)                              */
+/* [Disclaimers] This grading help is by no means to be complete. It is   */
+/*    to help students double check their implementations and assist TAs  */
+/*    in answering various questions from students. Actual grading may    */
+/*    introduce any new tests that are conformed with the spec, and       */
+/*    combinations of tests from these grading examples. In short,        */
+/*    students should be responsible for conducting suffficient tests     */
+/*    prior their submissions. Use ref program and shell commands (e.g.   */
+/*    diff, grep, etc) to check the correctness. Any questions, please    */
+/*    repond in FB group or through emails. Please note that actual       */
+/*    grading dofiles will not be released.                               */
+/* [Last Updated] 01-06-2018                                              */
+/**************************************************************************/
+
+1. CIRSWeep test
+
+  Certain floating gates are sweeped. Apply "cirp", "cirp -n", or "cirp -fl",
+  etc before and after sweeping to check the correctness. The "cirp *" output 
+  should match the ref program exactly. Output of "cirsw" (e.g. Sweeping:
+  AIG(5) removed...) will also be checked to make sure gates are actually
+  sweeped. Sweeping order will be specially handled and won't be checked.
+  UNDEF gate, if any, will be ignored.
+
+2. CIROPTize test
+
+  Certain gates are optimized away. Apply "cirp", "cirp -n", or "cirp -fl", 
+  etc before and after optimization to check the correctness. The "cirp *"
+  output should match the ref program exactly (i.e. AIG gates should be
+  merged by const 0/1; AIG gates with identical/inverted input should be
+  replaced by this input). 
+
+3. CIRSTRash test
+
+  Certain gates are merged by the strash operation. Apply "cirp" or "cirp -n"
+  etc before and after strashing to check the correctness. Since the merging
+  orders are arbitrary, we will NOT enforce the exact match of "cirp -n"
+  (but may write some scripts to check the correctness). However, the "cirp"
+  output should match the ref program exactly. Output of "cirstrash" will NOT
+  be checked.
+
+4. CIRSIM -Random test
+
+  Since different students may have different implementations on random
+  simulation, we will use small circuits to check the correctness of the
+  "cirsim -r" command as everybody should have exactly the same output for
+  such a small case. Apply "cirp -fec" after random simulation to check the
+  correctness. The output should match the ref program exactly.
+
+5. CIRSIM -File test (correctness)
+
+  The responses for the "cirsim -f" command should be the same for everyone.
+  We will use larger circuits to check the correctness of this command. Apply
+  "cirp -fec" before and after random simulation and use "cirg" (the third
+  line of its output) to check the correctness. Make sure simulation output
+  log and all the FEC groups match the ref program.
+
+6. CIRSIM -File test (performance)
+
+  Since "cirsim -f" executes the same amount of simulations and FEC checks
+  for different implementations, the performance of this command should be
+  comparable among students' and ref programs. TA will make sure both
+  student's and ref programs are compiled with the "-O3" flag. Performance
+  is checked on CPU time only.
+
+  * Student's score = MAX_score * (1 - penalty);
+  * Penalty := 0.0, if student_time <= x * ref_time (x = 2, for example),
+               1.0, if student_time >= y * ref_time (y = 5, for example),
+               0.z, if student_time is in between the above (linear adjustment)
+  * Termination will be enforced if student_time > y * ref_time.
+
+7. CIRFRaig test (correctness)
+
+  We will use small circuits to check the correctness of the "cirfraig"
+  command. Since the circuit is small, everyone should have the same
+  resultant circuit after the "cirfraig + cirsw" commands. Apply "cirp",
+  "cirp -n", or "cirg -fanin/-fanout" etc after the commands to check the
+  correctness. The output of "cirp *" and "cirg *" hould match the ref
+  program exactly.
+
+8. CIRFRaig test (runtime performance)
+
+  We will use small to medium circuits to check the performance of the
+  "cirfraig" command. Since the circuit is NOT large, everyone should have
+  the same resultant circuit after the "cirfraig + cirsw" commands. Apply
+  "cirp", "cirp -n", "cirg -fanin/-fanout" etc after the commands to check
+  the correctness. The output of "cirp *" and "cirg *" should match the ref
+  program exactly. CPU time will be measured for this check. TA will make
+  sure both student's and ref programs are compiled with the "-O3" flag.
+
+  * No proint will be given if the resultant circuit is NOT correct.
+  * Student's score = MAX_score * (1 - penalty);
+  * Penalty := 0.0, if student_time <= x * ref_time (x = 2, for example),
+               1.0, if student_time >= y * ref_time (y = 12, for example),
+               0.z, if student_time is in between the above (linear adjustment)
+  * Termination will be enforced if student_time > y * ref_time.
+
+9. CIRFRaig test (optimization performance)
+
+  We will use larger circuits to test the optimization power of student's
+  "cirfraig" implementation. After the cirfraig command, certain gates
+  should be optimized to const 0/1 or merged with others. Apply "cirp *" or
+  "cirg *" to check the correctness of the command. Student's score will be
+  graded by certain checks on the resultant circuits/gates, and the time
+  and optimization quality ratios.
+
+  * No point will be given if optimization result is functionally incorrect.
+  * Optimization check penalty: x% of score penalty will be applied if some
+    optimization checks fail. (e.g. Some gates can be merged to const 0).
+    (x = 20, for example)
+  * Optimization quality penalty := square_root(nGates_diff) / y,
+    where nGates_diff := student_num_gates - ref_num_gates,
+                         0, if student_num_gates < ref_num_gates
+    y = 50, for example (depending on circuit size)
+  * Performance quality penalty := 0.0, if student_time <= m * ref_time
+                                   1.0, if student_time >= n * ref_time
+                                   0.z, if student_time is in between above
+    m = 2, n = 22, for example
+  * Total penalty := summation of the above,
+                     1.0 if the summation is > 1.0
+  * Termination will be enforced if student_time > n * ref_time.
+

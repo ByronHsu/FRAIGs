@@ -1,0 +1,17 @@
+cirr test.aag
+ciropt
+cirstrash
+ciropt
+cirstrash
+ciropt
+cirstrash
+cirsim -r
+cirfraig
+cirsim -r
+cirfraig
+cirsim -r
+cirfraig
+cirsweep
+cirp
+usage
+q -f

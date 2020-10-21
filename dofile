@@ -1,0 +1,7 @@
+cirr tests.fraig/sim09.aag -r
+cirsim -r
+cirf
+cirsw
+cirstr
+cirsim -r
+cirf

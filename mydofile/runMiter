@@ -1,0 +1,15 @@
+cirmiter myoutput/my.aag myoutput/ref.aag
+cirsw
+ciropt
+cirstrash
+cirsim -r
+cirfraig
+cirsim -r
+cirfraig
+cirsw
+ciropt
+cirstrash
+ciropt
+cirp
+cirw
+q -f
